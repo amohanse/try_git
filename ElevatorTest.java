@@ -1,9 +1,7 @@
-package com.mohan.elevator;
+package com.bby.digi;
 
-import static org.hamcrest.core.Is.*;
-import static org.hamcrest.core.IsEqual.*;
-
-import java.util.Arrays;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,23 +9,47 @@ import org.junit.Test;
 public class ElevatorTest {
 	
 	@Test
-	public void testTwoPersons() {
-		int[] weights = {100,10,10};
-		int[] floors = {1,2,2};
-		int totalFloors = 2;
-		int maxweight = 100;
-		int maxpersion = 3;
+	public void testElevatorStops1() {
+		
+		int[] personWeight = {40,50,100,30,60,70};
+		int[] floorStop = {1,2,1,1,3,2};
+		
+		int numberOfFloors = 3;
+		int maxNumberOfPersonsAllowed = 3;
+		int maxWeightAllowed = 100;
 		
 		Elevator elevator = new Elevator();
 		
-		int stops = elevator.getStops(weights,floors, totalFloors, maxweight,maxpersion);
+		int numberOfStops = elevator.getStops(personWeight
+				,floorStop
+				,numberOfFloors
+				,maxNumberOfPersonsAllowed
+				,maxWeightAllowed);
 		
-		//Assert.assertThat(stops, is(equalTo(2)));
-		
-		//Arrays.deepToString(Arrays.copyOfRange(weights, 0, 0));
-		//Arrays.deepToString(Arrays.copyOfRange(weights, 0, 1));
-		//Arrays.deepToString(Arrays.copyOfRange(weights, 0, 2));
+		Assert.assertThat(numberOfStops, is(equalTo(10)));
 		
 	}
-
+	
+	@Test
+	public void testElevatorStops2() {
+		
+		int[] personWeight = {40,50,10,30,60,70};
+		int[] floorStop = {1,1,1,1,3,2};
+		
+		int numberOfFloors = 3;
+		int maxNumberOfPersonsAllowed = 3;
+		int maxWeightAllowed = 0;
+		
+		Elevator elevator = new Elevator();
+		
+		int numberOfStops = elevator.getStops(personWeight
+				,floorStop
+				,numberOfFloors
+				,maxNumberOfPersonsAllowed
+				,maxWeightAllowed);
+		
+		Assert.assertThat(numberOfStops, is(equalTo(0)));
+		
+	}
+	
 }
