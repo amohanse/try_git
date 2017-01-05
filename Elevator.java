@@ -1,54 +1,58 @@
-package com.mohan.elevator;
+package com.bby.digi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.IntStream;
-
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Elevator {
 
-	public int getStops(int[] weight, int[] floors, int totalFloors,
-			int maxWeight, int maxPerson) {
-		
-		int sumOfpersonsWeight = 0;
-		int countOfPerson = 0;
-		
-		int rangeFrom = 0;
-		int rangeTo;
-		
-		for(int i=0;i<weight.length;i++) {
-			
-			countOfPerson ++;
-			sumOfpersonsWeight += weight[i];
-			
-			if((sumOfpersonsWeight <=maxWeight) && (countOfPerson <=maxPerson)) {
-				
-				System.out.println("Persion at " +i + " can go in this lift");
-				
-			} else {
-				rangeTo = i-1;
-				if(rangeFrom == rangeTo) {
-					System.out.println("Single person goes in"+ weight[i]);
+	public int getStops(int[] weight, int[] floors, int totalFloors, int maxPerson, int maxWeight) {
+
+		int stops = 0;
+
+		if(maxWeight > 0) {
+
+			int sumOfpersonsWeight = 0;
+			int countOfPerson = 0;
+			List<Integer> weightCapList = new ArrayList<>();
+
+			for (int i = 0; i < weight.length; i++) {
+
+				if ((sumOfpersonsWeight + weight[i] <= maxWeight) && (countOfPerson <= maxPerson)) {
+					countOfPerson++;
+					sumOfpersonsWeight += weight[i];
+
 				} else {
-					printArray(Arrays.copyOfRange(weight, rangeFrom, rangeTo));
-				}	
-				rangeFrom = i;
-				
-				System.out.println("Persion at " +i + " can go in next lift");
-				sumOfpersonsWeight = 0;
-				countOfPerson = 0;
-			
+					weightCapList.add(i - 1);
+					sumOfpersonsWeight = weight[i];
+					countOfPerson = 1;
+				}
 			}
+
+			if (weightCapList.get(weightCapList.size() - 1) < weight.length) {
+				weightCapList.add(weight.length - 1);
+			}
+
+			stops = generateStop(weightCapList, floors);
 		}
-		
-		return 0;
+
+		return stops;
 	}
-	
-	public void printArray(int[] values) {
-		
-		System.out.println("Size :"+values.length);
-		
-		 IntStream.of(values).forEach(
-		            element -> System.out.println(element));
+
+	private int generateStop(List<Integer> stopIndexes, int[] floors) {
+		int numberOfStops = 0;
+		int startFloor = 0;
+		Set<Object> _tempFloorStops = new HashSet<>();
+		for (Integer stopFloor : stopIndexes) {
+			_tempFloorStops = Arrays.stream(Arrays.copyOfRange(floors, startFloor,stopFloor+1)).boxed().collect(Collectors.toSet());
+			startFloor = stopFloor + 1;
+			numberOfStops += _tempFloorStops.size() + 1;
+			
+		}
+		return numberOfStops;
 	}
 
 }
