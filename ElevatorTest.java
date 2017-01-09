@@ -1,4 +1,4 @@
-package com.bby.digi;
+package com.mohan.digi;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
